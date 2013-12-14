@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <style>
+        ul {
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+        li {
+            width: 40px;
+            padding-left: 5px;
+            padding-right: 5px;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            background-color: #99DDBB;
+            border: 1px solid #000000;
+            border-radius: 25px;
+        }
+    </style>
+    <script src="lib/angular/angular.js"></script>
+    <script>
+        function ThingController($scope) {
+            $scope.thing = {key: 'Eb'}
+            $scope.chkd = true
+            $scope.notes =
+                [
+                    {flat: 'C', sharp:'C'},
+                    {flat: 'Db', sharp:'C#'},
+                    {flat: 'D', sharp:'D'},
+                    {flat: 'Eb', sharp:'D#'},
+                    {flat: 'E', sharp:'E'},
+                    {flat: 'F', sharp:'F'},
+                    {flat: 'Gb', sharp:'F#'},
+                    {flat: 'G', sharp:'G'},
+                    {flat: 'Ab', sharp:'G#'},
+                    {flat: 'A', sharp:'A'},
+                    {flat: 'Bb', sharp:'A#'},
+                    {flat: 'B', sharp:'B'}
+                ]
+            $scope.clicked = function() {
+                $scope.chkd = !$scope.chkd
+                alert($scope.chkd)
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+<div ng-controller="ThingController">
+
+    <form>
+        <input type="checkbox" ng-model="chkd">
+        <input type="submit" ng-click="clicked()"/>
+    </form>
+
+    <div ng-model="thing" ng-show="chkd">
+        {{thing.key}}
+        <ul>
+            <li ng-repeat="note in notes" ng-click="clicked()">
+                {{note.flat}}
+            </li>
+        </ul>
+        {{notes.length}}
+    </div>
+
+
+</div>
+<br>
+Hey There
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+body {
+    font-size: 18px;
+    color: red;
+}
+
+.table {
+
+}
+
+.row {
+    color: blue;
+}
+
+.gr li:first-child {
+    color: green;
+}
+
+.pk {
+    color: pink;
+}
+
+.table
+{
+    display: table;
+    width:auto;
+    background-color:red;
+    border:5px solid  purple;
+    border-spacing:5px;/*cellspacing:poor IE support for  this*/
+    border-collapse:separate;
+}
+
+.row
+{
+    display:table-row;
+    width:auto;
+
+}
+.row:first-child {
+    background-color: #00e040;
+}
+
+.cell
+{
+    float:left;/*fix for  buggy browsers*/
+    display:table-column;
+    width:100px;
+    /*background-color:#800080;*/
+
+}
