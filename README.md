@@ -1,6 +1,7 @@
 frets
 =====
 
-Fretboard tools
+Fretboard tools - a system for looking at notes and chords on fretted musical instruments.
 
-This will be run in Heroku
+
+
