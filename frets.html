@@ -57,28 +57,43 @@
     <script src="public/lib/angular/angular.js"></script>
     <script>
         function FretsController($scope) {
+            // These are the instruments.  They need to have their strings populated
+            // from the algorithm.
+            var guitar = {
+                name: 'Guitar',
+                openStrings: [4, 9, 2, 7, 11, 4],
+                strings: []
+            }
+            var fiddle = {
+                name: 'Fiddle',
+                openStrings: [7, 2, 9, 4],
+                strings: []
+            }
+            var ukulele = {
+                name: 'Ukulele',
+                openStrings: [7, 0, 4, 9],
+                strings: []
+            }
+            var bass = {
+                name: 'Bass',
+                openStrings: [4, 9, 2, 7],
+                strings: []
+            }
+            var dobro = {
+                name: 'Dobro',
+                openStrings: [7, 11, 2, 7, 11, 2],
+                strings: []
+            }
+
+            //TODO This is bogus
+            var getInstrument = function(instrument){
+                instrument.strings = instrument.openStrings
+                return instrument
+            }
+
+            $scope.instrument = getInstrument(guitar)
 
             $scope.checked = true
-
-            $scope.key = 'qwe'
-
-            $scope.guitar = {
-                strings: [4, 9, 2, 7, 11, 4]
-            }
-            $scope.fiddle = {
-                strings: [7, 2, 9, 4]
-            }
-            $scope.ukulele = {
-                strings: [7, 0, 4, 9]
-            }
-            $scope.bass = {
-                strings: [4, 9, 2, 7]
-            }
-            $scope.dobro = {
-                strings: [7, 11, 2, 7, 11, 2]
-            }
-
-            $scope.instrument = $scope.guitar
 
             $scope.intNames =
                 ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
@@ -100,8 +115,7 @@
                 ]
 
             $scope.clicked = function() {
-            //    $scope.chkd = !$scope.chkd
-                alert('temp')
+                alert(instrument.name)
             }
         }
     </script>
@@ -128,7 +142,7 @@
 
     <div class="fretBoard">
         <div class="string" ng-repeat="string in instrument.strings">
-            <div class="spot" ng-repeat="noteName in noteNames">
+            <div class="spot" ng-repeat="string in instrument.strings">
                 <div class="spotInner" ng-click="clicked()">
                     {{noteNames[$index].flat}}
                 </div>
