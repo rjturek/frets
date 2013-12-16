@@ -19,16 +19,58 @@
             border: 1px solid #000000;
             border-radius: 15px;
         }
+
+        .fretBoard
+        {
+            display: table;
+        }
+        .string
+        {
+            display:table-row;
+        }
+        .spot
+        {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 30px;
+            background-color: rgba(114, 184, 197, 0.23);
+            border: 2px solid #5b919c;
+            border-radius: 15px;
+        }
+
+        .spotInner {
+            position:absolute;
+            background-color: rgba(197, 157, 196, 0.41);
+            width: 30px;
+            top: 20%;
+            left: 20%;
+            /*margin: 2px auto;*/
+
+            /*margin-top:-5em;*/
+        }
+
+
     </style>
     <script src="public/lib/angular/angular.js"></script>
     <script>
         function FretsController($scope) {
 
-            $scope.guitarTunings    = [4, 9, 2, 7, 11, 4]
-            $scope.fiddleTunings    = [7, 2, 9, 4]
-            $scope.ukuleleTunings   = [7, 0, 4, 9]
-            $scope.bassTunings      = [4, 9, 2, 7]
-            $scope.dobroTunings     = [7, 11, 2, 7, 11, 2]
+            $scope.checked = true
+
+            $scope.key = 'qwe'
+
+            $scope.guitar = {
+                strings: [4, 9, 2, 7, 11, 4]
+            }
+
+            $scope.guitarStrings    = [4, 9, 2, 7, 11, 4]
+            $scope.fiddleStrings    = [7, 2, 9, 4]
+            $scope.ukuleleStrings   = [7, 0, 4, 9]
+            $scope.bassStrings      = [4, 9, 2, 7]
+            $scope.dobroStrings     = [7, 11, 2, 7, 11, 2]
+
+            $scope.instrument = $scope.guitarStrings
 
             $scope.intNames =
                 ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
@@ -62,41 +104,36 @@
 <div ng-controller="FretsController">
 
     <form>
-        <input type="checkbox" ng-model="chkd">
+        <input type="checkbox" ng-model="checked">
         <input type="submit" ng-click="clicked()"/>
     </form>
 
-    <div ng-model="thing" ng-show="chkd">
-        {{thing.key}}
-        <ul>
-            <li ng-repeat="noteNames in notes" ng-click="clicked()">
-                {{noteName.flat}}
-            </li>
-        </ul>
-        {{noteNames.length}}
-    </div>
+    {{key}}
 
-    <div id="table">
-        <div class="row">
-            <span class="cell">sdf</span>
-            <span class="cell">gfee</span>
-            <span class="cell">fgdfg</span>
-        </div>
-        <div class="row">
-            <span class="cell">dfgdfg</span>
-            <span class="cell">5yhryh</span>
-            <span class="cell">tyhythy</span>
-        </div>
-        <div class="row">
-            <span class="cell">rhyrhy</span>
-            <span class="cell">rhyryh</span>
-            <span class="cell">fghfghfgh</span>
+    <!--<ul>-->
+        <!--<li ng-repeat="noteName in noteNames" ng-click="clicked()">-->
+            <!--{{noteName.flat}}-->
+        <!--</li>-->
+    <!--</ul>-->
+
+    <!--{{noteNames.length}}-->
+
+    <!--<div class="fretBoard">-->
+        <!--<div class="string" ng-repeat="guitarString in guitarStrings">-->
+            <!--<div class="spot" ng-repeat="noteName in noteNames">{{intNames[$index]}}</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <div class="fretBoard">
+        <div class="string" ng-repeat="guitarString in guitarStrings">
+            <div class="spot" ng-repeat="noteName in noteNames">
+                <div class="spotInner">
+                    {{noteNames[$index].flat}}</div>
+            </div>
         </div>
     </div>
 
 </div>
-<br>
-Hey There
 
 </body>
 </html>
