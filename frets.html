@@ -27,13 +27,15 @@
         .string
         {
             display:table-row;
+            height: 20px;
         }
         .spot
         {
             position: relative;
             display: inline-block;
-            width: 50px;
-            height: 30px;
+            width: 40px;
+            height: 20px;
+            margin: -1px 0px -2px 0px;
             background-color: rgba(114, 184, 197, 0.23);
             border: 2px solid #5b919c;
             border-radius: 15px;
@@ -41,11 +43,11 @@
 
         .spotInner {
             position:absolute;
-            background-color: rgba(197, 157, 196, 0.41);
-            width: 30px;
-            top: 20%;
-            left: 20%;
-            /*margin: 2px auto;*/
+            /*background-color: rgba(197, 157, 196, 0.41);*/
+            width: 25px;
+            /*top: 15%;*/
+            /*left: 23%;*/
+            margin: 2px 0px 2px 7px;
 
             /*margin-top:-5em;*/
         }
@@ -63,14 +65,20 @@
             $scope.guitar = {
                 strings: [4, 9, 2, 7, 11, 4]
             }
+            $scope.fiddle = {
+                strings: [7, 2, 9, 4]
+            }
+            $scope.ukulele = {
+                strings: [7, 0, 4, 9]
+            }
+            $scope.bass = {
+                strings: [4, 9, 2, 7]
+            }
+            $scope.dobro = {
+                strings: [7, 11, 2, 7, 11, 2]
+            }
 
-            $scope.guitarStrings    = [4, 9, 2, 7, 11, 4]
-            $scope.fiddleStrings    = [7, 2, 9, 4]
-            $scope.ukuleleStrings   = [7, 0, 4, 9]
-            $scope.bassStrings      = [4, 9, 2, 7]
-            $scope.dobroStrings     = [7, 11, 2, 7, 11, 2]
-
-            $scope.instrument = $scope.guitarStrings
+            $scope.instrument = $scope.guitar
 
             $scope.intNames =
                 ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
@@ -118,20 +126,17 @@
 
     <!--{{noteNames.length}}-->
 
-    <!--<div class="fretBoard">-->
-        <!--<div class="string" ng-repeat="guitarString in guitarStrings">-->
-            <!--<div class="spot" ng-repeat="noteName in noteNames">{{intNames[$index]}}</div>-->
-        <!--</div>-->
-    <!--</div>-->
-
     <div class="fretBoard">
-        <div class="string" ng-repeat="guitarString in guitarStrings">
+        <div class="string" ng-repeat="string in instrument.strings">
             <div class="spot" ng-repeat="noteName in noteNames">
-                <div class="spotInner">
-                    {{noteNames[$index].flat}}</div>
+                <div class="spotInner" ng-click="clicked()">
+                    {{noteNames[$index].flat}}
+                </div>
             </div>
         </div>
     </div>
+
+    {{noteNames.length}}
 
 </div>
 
