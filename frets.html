@@ -17,15 +17,23 @@
             text-align: center;
             background-color: #99DDBB;
             border: 1px solid #000000;
-            border-radius: 25px;
+            border-radius: 15px;
         }
     </style>
     <script src="public/lib/angular/angular.js"></script>
     <script>
-        function ThingController($scope) {
-            $scope.thing = {key: 'Eb'}
-            $scope.chkd = true
-            $scope.notes =
+        function FretsController($scope) {
+
+            $scope.guitarTunings    = [4, 9, 2, 7, 11, 4]
+            $scope.fiddleTunings    = [7, 2, 9, 4]
+            $scope.ukuleleTunings   = [7, 0, 4, 9]
+            $scope.bassTunings      = [4, 9, 2, 7]
+            $scope.dobroTunings     = [7, 11, 2, 7, 11, 2]
+
+            $scope.intNames =
+                ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
+
+            $scope.noteNames =
                 [
                     {flat: 'C', sharp:'C'},
                     {flat: 'Db', sharp:'C#'},
@@ -40,9 +48,10 @@
                     {flat: 'Bb', sharp:'A#'},
                     {flat: 'B', sharp:'B'}
                 ]
+
             $scope.clicked = function() {
-                $scope.chkd = !$scope.chkd
-                alert($scope.chkd)
+            //    $scope.chkd = !$scope.chkd
+                alert('temp')
             }
         }
     </script>
@@ -50,7 +59,7 @@
 
 <body>
 
-<div ng-controller="ThingController">
+<div ng-controller="FretsController">
 
     <form>
         <input type="checkbox" ng-model="chkd">
@@ -60,13 +69,30 @@
     <div ng-model="thing" ng-show="chkd">
         {{thing.key}}
         <ul>
-            <li ng-repeat="note in notes" ng-click="clicked()">
-                {{note.flat}}
+            <li ng-repeat="noteNames in notes" ng-click="clicked()">
+                {{noteName.flat}}
             </li>
         </ul>
-        {{notes.length}}
+        {{noteNames.length}}
     </div>
 
+    <div id="table">
+        <div class="row">
+            <span class="cell">sdf</span>
+            <span class="cell">gfee</span>
+            <span class="cell">fgdfg</span>
+        </div>
+        <div class="row">
+            <span class="cell">dfgdfg</span>
+            <span class="cell">5yhryh</span>
+            <span class="cell">tyhythy</span>
+        </div>
+        <div class="row">
+            <span class="cell">rhyrhy</span>
+            <span class="cell">rhyryh</span>
+            <span class="cell">fghfghfgh</span>
+        </div>
+    </div>
 
 </div>
 <br>
