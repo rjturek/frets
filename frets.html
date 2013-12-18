@@ -2,6 +2,11 @@
 <html ng-app>
 <head>
     <style>
+
+        * {
+            font-family: sans-serif;
+        }
+
         ul {
             width: 100%;
             margin-left: auto;
@@ -21,36 +26,38 @@
         }
 
         .fretBoard {
+            font-size: 95%;
             display: table;
+            margin-left: 50px;
         }
 
         .string {
             display:table-row;
+            background-color: rgba(255, 231, 151, 0.45);
             /*height: 10px;*/
         }
         .spot {
             position: relative;
             display: inline-block;
             width: 32px;
-            height: 20px;
+            height: 24px;
             margin: -2px 0 -2px 0;
-            background-color: rgba(114, 184, 197, 0.23);
             border: 1px solid #5b919c;
-            /*border-radius: 15px;*/
         }
 
 
         .spotInner {
             position:absolute;
             width: 25px;
-            margin: 2px 0 2px 8px;
+            margin: 4px 0 0px 6px;
+            /*background-color: rgba(114, 184, 197, 0.35);*/
         }
 
         .played {
             position: absolute;
-            width: 26px;
-            margin: 2px 0 2px 4px;
-            background-color: rgba(54, 90, 189, 0.33);
+            width: 24px;
+            margin: 4px 4px 0px 4px;
+            background-color: rgba(156, 84, 64, 0.18);
             border-radius: 12px;
         }
 
@@ -117,7 +124,6 @@
                 var spotNoteName = flats ? noteNames[ptr].flat : noteNames[ptr].sharp
                 var spot = {note: spotNoteName, played: false}
                 string.push(spot)
-                //console.log(intNames[ptr])
                 ptr++
                 if (ptr > 11) {
                     ptr = 0
@@ -143,7 +149,6 @@
 
             $scope.clicked = function(spot) {
                 spot.played = !spot.played
-                console.log(spot.note + " " + spot.played)
             }
         }
     </script>
@@ -169,7 +174,7 @@
     <div class="fretBoard">
         <div class="string" ng-repeat="string in instrument.strings">
             <div class="spot" ng-repeat="spot in string">
-                <div  ng-hide="!(spot.played)" class="played">
+                <div  ng-show="spot.played" class="played">
                    &nbsp;
                 </div>
                 <div class="spotInner" ng-click="clicked(spot)">
