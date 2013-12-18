@@ -59,6 +59,8 @@
 
         var stringLength = 18
 
+        var flats = true
+
         var intNames =
             ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
 
@@ -111,7 +113,8 @@
             var string = [];
             var ptr = instrument.openStrings[stringNum];
             for (var i=0; i<stringLength; i++) {
-                var spot = {note: noteNames[ptr], played: false}
+                var spotNoteName = flats ? noteNames[ptr].flat : noteNames[ptr].sharp
+                var spot = {note: spotNoteName, played: false}
                 string.push(spot)
                 //console.log(intNames[ptr])
                 ptr++
@@ -137,8 +140,8 @@
 
             $scope.checked = true
 
-            $scope.clicked = function() {
-                alert($scope.instrument.name)
+            $scope.clicked = function(spot) {
+                alert(spot.note)
             }
         }
     </script>
@@ -164,8 +167,8 @@
     <div class="fretBoard">
         <div class="string" ng-repeat="string in instrument.strings">
             <div class="spot" ng-repeat="spot in string">
-                <div class="spotInner" ng-click="clicked()">
-                    {{spot.note.flat}}
+                <div class="spotInner" ng-click="clicked(spot)">
+                    {{spot.note}}
                 </div>
             </div>
         </div>
