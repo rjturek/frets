@@ -42,22 +42,23 @@
 
         .spotInner {
             position:absolute;
-            /*background-color: rgba(197, 157, 196, 0.41);*/
             width: 25px;
-            /*top: 15%;*/
-            /*left: 23%;*/
             margin: 2px 0 2px 10px;
-
-            /*margin-top:-5em;*/
         }
 
-        .fretted
+        .played {
+            position: absolute;
+            width: 25px;
+            margin: 2px 0 2px 4px;
+            background-color: rgba(91, 145, 156, 0.36);
+            border-radius: 12px;
+        }
 
     </style>
     <script src="public/lib/angular/angular.js"></script>
     <script>
 
-        var stringLength = 18
+        var stringLength = 13
 
         var flats = true
 
@@ -141,7 +142,8 @@
             $scope.checked = true
 
             $scope.clicked = function(spot) {
-                alert(spot.note)
+                spot.played = !spot.played
+                console.log(spot.note + " " + spot.played)
             }
         }
     </script>
@@ -169,6 +171,9 @@
             <div class="spot" ng-repeat="spot in string">
                 <div class="spotInner" ng-click="clicked(spot)">
                     {{spot.note}}
+                </div>
+                <div class="played" ng-click="clicked(spot)">
+                   &nbsp;
                 </div>
             </div>
         </div>
