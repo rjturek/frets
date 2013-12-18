@@ -33,8 +33,7 @@
 
         .string {
             display:table-row;
-            background-color: rgba(255, 231, 151, 0.45);
-            /*height: 10px;*/
+            background-color: rgba(255, 205, 178, 0.13);
         }
         .spot {
             position: relative;
@@ -42,22 +41,21 @@
             width: 32px;
             height: 24px;
             margin: -2px 0 -2px 0;
-            border: 1px solid #5b919c;
+            border: 1px solid #92b2d5;
         }
 
-
-        .spotInner {
+        .spotText {
             position:absolute;
             width: 25px;
             margin: 4px 0 0px 6px;
-            /*background-color: rgba(114, 184, 197, 0.35);*/
+            /*background-color: rgba(91, 145, 156, 0.18);*/
         }
 
         .played {
             position: absolute;
-            width: 24px;
-            margin: 4px 4px 0px 4px;
-            background-color: rgba(156, 84, 64, 0.18);
+            width: 27px;
+            margin: 4px 0px 0px 2px;
+            background-color: rgba(33, 156, 154, 0.18);
             border-radius: 12px;
         }
 
@@ -65,56 +63,60 @@
     <script src="public/lib/angular/angular.js"></script>
     <script>
 
-        var stringLength = 13
+/////////////////////////////////////////////////////////////
+// Constants
+
+var stringLength = 13
+
+var intNames =
+    ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
+
+var noteNames =
+    [
+        {flat: 'C', sharp:'C'},
+        {flat: 'Db', sharp:'C#'},
+        {flat: 'D', sharp:'D'},
+        {flat: 'Eb', sharp:'D#'},
+        {flat: 'E', sharp:'E'},
+        {flat: 'F', sharp:'F'},
+        {flat: 'Gb', sharp:'F#'},
+        {flat: 'G', sharp:'G'},
+        {flat: 'Ab', sharp:'G#'},
+        {flat: 'A', sharp:'A'},
+        {flat: 'Bb', sharp:'A#'},
+        {flat: 'B', sharp:'B'}
+    ]
+
+
+//////////////////////////////////////
+// instrument Definitions
+
+var guitar = {
+    name: 'Guitar',
+    openStrings: [4, 11, 7, 2, 9,  4]
+}
+
+var fiddle = {
+    name: 'Fiddle',
+    openStrings: [4, 9, 2, 7]
+}
+
+var ukulele = {
+    name: 'Ukulele',
+    openStrings: [9, 4, 0, 7]
+}
+
+var bass = {
+    name: 'Bass',
+    openStrings: [7, 2, 9, 4]
+}
+
+var dobro = {
+    name: 'Dobro',
+    openStrings: [2, 11, 7, 2, 11, 7]
+}
 
         var flats = true
-
-        var intNames =
-            ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
-
-        var noteNames =
-            [
-                {flat: 'C', sharp:'C'},
-                {flat: 'Db', sharp:'C#'},
-                {flat: 'D', sharp:'D'},
-                {flat: 'Eb', sharp:'D#'},
-                {flat: 'E', sharp:'E'},
-                {flat: 'F', sharp:'F'},
-                {flat: 'Gb', sharp:'F#'},
-                {flat: 'G', sharp:'G'},
-                {flat: 'Ab', sharp:'G#'},
-                {flat: 'A', sharp:'A'},
-                {flat: 'Bb', sharp:'A#'},
-                {flat: 'B', sharp:'B'}
-            ]
-
-        // These are the instruments.  They need to have their strings populated
-        // from the algorithm.
-        var guitar = {
-            name: 'Guitar',
-            openStrings: [4, 11, 7, 2, 9,  4],
-            strings: []
-        }
-        var fiddle = {
-            name: 'Fiddle',
-            openStrings: [4, 9, 2, 7],
-            strings: []
-        }
-        var ukulele = {
-            name: 'Ukulele',
-            openStrings: [9, 4, 0, 7],
-            strings: []
-        }
-        var bass = {
-            name: 'Bass',
-            openStrings: [7, 2, 9, 4],
-            strings: []
-        }
-        var dobro = {
-            name: 'Dobro',
-            openStrings: [2, 11, 7, 2, 11, 7],
-            strings: []
-        }
 
         function prepString(instrument, stringNum) {
 //            console.log(instrument, stringNum)
@@ -140,6 +142,10 @@
             }
             return instrument
         }
+
+
+//////////////////////////////////////////////////////////////////////////////
+// Controller
 
         function FretsController($scope) {
 
@@ -177,7 +183,7 @@
                 <div  ng-show="spot.played" class="played">
                    &nbsp;
                 </div>
-                <div class="spotInner" ng-click="clicked(spot)">
+                <div class="spotText" ng-click="clicked(spot)">
                     {{spot.note}}
                 </div>
             </div>
