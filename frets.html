@@ -20,26 +20,25 @@
             border-radius: 15px;
         }
 
-        .fretBoard
-        {
+        .fretBoard {
             display: table;
         }
-        .string
-        {
+
+        .string {
             display:table-row;
             /*height: 10px;*/
         }
-        .spot
-        {
+        .spot {
             position: relative;
             display: inline-block;
             width: 32px;
             height: 20px;
-            margin: -2px 0px -2px 0px;
+            margin: -2px 0 -2px 0;
             background-color: rgba(114, 184, 197, 0.23);
             border: 1px solid #5b919c;
             /*border-radius: 15px;*/
         }
+
 
         .spotInner {
             position:absolute;
@@ -47,11 +46,12 @@
             width: 25px;
             /*top: 15%;*/
             /*left: 23%;*/
-            margin: 2px 0px 2px 10px;
+            margin: 2px 0 2px 10px;
 
             /*margin-top:-5em;*/
         }
 
+        .fretted
 
     </style>
     <script src="public/lib/angular/angular.js"></script>
@@ -82,36 +82,37 @@
         // from the algorithm.
         var guitar = {
             name: 'Guitar',
-            openStrings: [4, 9, 2, 7, 11, 4],
+            openStrings: [4, 11, 7, 2, 9,  4],
             strings: []
         }
         var fiddle = {
             name: 'Fiddle',
-            openStrings: [7, 2, 9, 4],
+            openStrings: [4, 9, 2, 7],
             strings: []
         }
         var ukulele = {
             name: 'Ukulele',
-            openStrings: [7, 0, 4, 9],
+            openStrings: [9, 4, 0, 7],
             strings: []
         }
         var bass = {
             name: 'Bass',
-            openStrings: [4, 9, 2, 7],
+            openStrings: [7, 2, 9, 4],
             strings: []
         }
         var dobro = {
             name: 'Dobro',
-            openStrings: [7, 11, 2, 7, 11, 2],
+            openStrings: [2, 11, 7, 2, 11, 7],
             strings: []
         }
 
-        function getString(instrument, stringNum) {
-            console.log(instrument, stringNum)
+        function prepString(instrument, stringNum) {
+//            console.log(instrument, stringNum)
             var string = [];
             var ptr = instrument.openStrings[stringNum];
             for (var i=0; i<stringLength; i++) {
-                string.push(intNames[ptr])
+                var spot = {note: noteNames[ptr], played: false}
+                string.push(spot)
                 //console.log(intNames[ptr])
                 ptr++
                 if (ptr > 11) {
@@ -124,7 +125,7 @@
         function getInstrument (instrument) {
             instrument.strings = []
             for (var i=0; i<instrument.openStrings.length; i++) {
-                var string = getString(instrument,i)
+                var string = prepString(instrument,i)
                 instrument.strings.push(string)
             }
             return instrument
@@ -164,7 +165,7 @@
         <div class="string" ng-repeat="string in instrument.strings">
             <div class="spot" ng-repeat="spot in string">
                 <div class="spotInner" ng-click="clicked()">
-                    {{spot}}
+                    {{spot.note.flat}}
                 </div>
             </div>
         </div>
