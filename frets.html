@@ -27,18 +27,18 @@
         .string
         {
             display:table-row;
-            height: 20px;
+            /*height: 10px;*/
         }
         .spot
         {
             position: relative;
             display: inline-block;
-            width: 40px;
+            width: 32px;
             height: 20px;
-            margin: -1px 0px -2px 0px;
+            margin: -2px 0px -2px 0px;
             background-color: rgba(114, 184, 197, 0.23);
-            border: 2px solid #5b919c;
-            border-radius: 15px;
+            border: 1px solid #5b919c;
+            /*border-radius: 15px;*/
         }
 
         .spotInner {
@@ -47,7 +47,7 @@
             width: 25px;
             /*top: 15%;*/
             /*left: 23%;*/
-            margin: 2px 0px 2px 7px;
+            margin: 2px 0px 2px 10px;
 
             /*margin-top:-5em;*/
         }
@@ -56,66 +56,88 @@
     </style>
     <script src="public/lib/angular/angular.js"></script>
     <script>
-        function FretsController($scope) {
-            // These are the instruments.  They need to have their strings populated
-            // from the algorithm.
-            var guitar = {
-                name: 'Guitar',
-                openStrings: [4, 9, 2, 7, 11, 4],
-                strings: []
-            }
-            var fiddle = {
-                name: 'Fiddle',
-                openStrings: [7, 2, 9, 4],
-                strings: []
-            }
-            var ukulele = {
-                name: 'Ukulele',
-                openStrings: [7, 0, 4, 9],
-                strings: []
-            }
-            var bass = {
-                name: 'Bass',
-                openStrings: [4, 9, 2, 7],
-                strings: []
-            }
-            var dobro = {
-                name: 'Dobro',
-                openStrings: [7, 11, 2, 7, 11, 2],
-                strings: []
-            }
 
-            //TODO This is bogus
-            var getInstrument = function(instrument){
-                instrument.strings = instrument.openStrings
-                return instrument
+        var stringLength = 18
+
+        var intNames =
+            ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
+
+        var noteNames =
+            [
+                {flat: 'C', sharp:'C'},
+                {flat: 'Db', sharp:'C#'},
+                {flat: 'D', sharp:'D'},
+                {flat: 'Eb', sharp:'D#'},
+                {flat: 'E', sharp:'E'},
+                {flat: 'F', sharp:'F'},
+                {flat: 'Gb', sharp:'F#'},
+                {flat: 'G', sharp:'G'},
+                {flat: 'Ab', sharp:'G#'},
+                {flat: 'A', sharp:'A'},
+                {flat: 'Bb', sharp:'A#'},
+                {flat: 'B', sharp:'B'}
+            ]
+
+        // These are the instruments.  They need to have their strings populated
+        // from the algorithm.
+        var guitar = {
+            name: 'Guitar',
+            openStrings: [4, 9, 2, 7, 11, 4],
+            strings: []
+        }
+        var fiddle = {
+            name: 'Fiddle',
+            openStrings: [7, 2, 9, 4],
+            strings: []
+        }
+        var ukulele = {
+            name: 'Ukulele',
+            openStrings: [7, 0, 4, 9],
+            strings: []
+        }
+        var bass = {
+            name: 'Bass',
+            openStrings: [4, 9, 2, 7],
+            strings: []
+        }
+        var dobro = {
+            name: 'Dobro',
+            openStrings: [7, 11, 2, 7, 11, 2],
+            strings: []
+        }
+
+        function getString(instrument, stringNum) {
+            console.log(instrument, stringNum)
+            var string = [];
+            var ptr = instrument.openStrings[stringNum];
+            for (var i=0; i<stringLength; i++) {
+                string.push(intNames[ptr])
+                //console.log(intNames[ptr])
+                ptr++
+                if (ptr > 11) {
+                    ptr = 0
+                }
             }
+            return string
+        }
+
+        function getInstrument (instrument) {
+            instrument.strings = []
+            for (var i=0; i<instrument.openStrings.length; i++) {
+                var string = getString(instrument,i)
+                instrument.strings.push(string)
+            }
+            return instrument
+        }
+
+        function FretsController($scope) {
 
             $scope.instrument = getInstrument(guitar)
 
             $scope.checked = true
 
-            $scope.intNames =
-                ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
-
-            $scope.noteNames =
-                [
-                    {flat: 'C', sharp:'C'},
-                    {flat: 'Db', sharp:'C#'},
-                    {flat: 'D', sharp:'D'},
-                    {flat: 'Eb', sharp:'D#'},
-                    {flat: 'E', sharp:'E'},
-                    {flat: 'F', sharp:'F'},
-                    {flat: 'Gb', sharp:'F#'},
-                    {flat: 'G', sharp:'G'},
-                    {flat: 'Ab', sharp:'G#'},
-                    {flat: 'A', sharp:'A'},
-                    {flat: 'Bb', sharp:'A#'},
-                    {flat: 'B', sharp:'B'}
-                ]
-
             $scope.clicked = function() {
-                alert(instrument.name)
+                alert($scope.instrument.name)
             }
         }
     </script>
@@ -125,32 +147,30 @@
 
 <div ng-controller="FretsController">
 
+    <br>
+
     <form>
         <input type="checkbox" ng-model="checked">
         <input type="submit" ng-click="clicked()"/>
     </form>
 
-    {{key}}
+<br><br>
+ {{instrument.name}}
+ <br>
+ <br>
 
-    <!--<ul>-->
-        <!--<li ng-repeat="noteName in noteNames" ng-click="clicked()">-->
-            <!--{{noteName.flat}}-->
-        <!--</li>-->
-    <!--</ul>-->
-
-    <!--{{noteNames.length}}-->
 
     <div class="fretBoard">
         <div class="string" ng-repeat="string in instrument.strings">
-            <div class="spot" ng-repeat="string in instrument.strings">
+            <div class="spot" ng-repeat="spot in string">
                 <div class="spotInner" ng-click="clicked()">
-                    {{noteNames[$index].flat}}
+                    {{spot}}
                 </div>
             </div>
         </div>
     </div>
 
-    {{noteNames.length}}
+
 
 </div>
 
