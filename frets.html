@@ -44,11 +44,18 @@
             border: 1px solid #92b2d5;
         }
 
+        .openMarker {
+            background-color: rgba(238, 189, 161, 0.20);
+        }
+
+        .marker {
+            background-color: rgba(251, 202, 172, 0.18);
+        }
+
         .spotText {
             position:absolute;
             width: 25px;
             margin: 4px 0 0px 6px;
-            /*background-color: rgba(91, 145, 156, 0.18);*/
         }
 
         .played {
@@ -67,7 +74,7 @@
 /////////////////////////////////////////////////////////////
 // Constants
 
-var stringLength = 13
+var stringLength = 17
 
 var intNames =
     ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
@@ -129,6 +136,12 @@ var dobro = {
             for (var i=0; i<stringLength; i++) {
                 var spotNoteName = flats ? noteNames[ptr].flat : noteNames[ptr].sharp
                 var spot = {note: spotNoteName, played: false}
+                if (i == 0) {
+                    spot.openMarker = true
+                }
+                else if([5, 9, 12].indexOf(i) > -1) {
+                    spot.marker = true
+                }
                 string.push(spot)
                 ptr++
                 if (ptr > 11) {
@@ -183,7 +196,8 @@ var dobro = {
 
     <div class="fretBoard">
         <div class="string" ng-repeat="string in fretboard.strings">
-            <div class="spot" ng-repeat="spot in string">
+            <div class="spot" ng-repeat="spot in string"
+                 ng-class="{openMarker:spot.openMarker, marker:spot.marker}" >
                 <div  ng-show="spot.played" class="played">
                    &nbsp;
                 </div>
