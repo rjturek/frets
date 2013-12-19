@@ -46,10 +46,11 @@
 
         .openMarker {
             background-color: rgba(238, 189, 161, 0.20);
+            border-right: 3px solid #92b2d5;;
         }
 
         .marker {
-            background-color: rgba(251, 202, 172, 0.18);
+            background-color: rgba(251, 202, 172, 0.15);
         }
 
         .spotText {
@@ -139,7 +140,7 @@ var dobro = {
                 if (i == 0) {
                     spot.openMarker = true
                 }
-                else if([5, 9, 12].indexOf(i) > -1) {
+                else if([5, 7, 9, 12].indexOf(i) > -1) {
                     spot.marker = true
                 }
                 string.push(spot)
