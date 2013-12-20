@@ -128,37 +128,39 @@ var dobro = {
 ////////////////////////////////////////////////////////
 // Get a fretboard
 
-        var flats = true
-
-        function prepString(instrument, stringNum) {
-//            console.log(instrument, stringNum)
-            var string = [];
-            var ptr = instrument.openStrings[stringNum];
-            for (var i=0; i<stringLength; i++) {
-                var spotNoteName = flats ? noteNames[ptr].flat : noteNames[ptr].sharp
-                var spot = {note: spotNoteName, played: false}
-                if (i == 0) {
-                    spot.openMarker = true
-                }
-                else if([5, 7, 9, 12].indexOf(i) > -1) {
-                    spot.marker = true
-                }
-                string.push(spot)
-                ptr++
-                if (ptr > 11) {
-                    ptr = 0
-                }
-            }
-            return string
-        }
 
         function getFretboard (instrument) {
+
+            var flats = true
+
             instrument.strings = []
             for (var i=0; i<instrument.openStrings.length; i++) {
                 var string = prepString(instrument,i)
                 instrument.strings.push(string)
             }
             return instrument
+
+            function prepString(instrument, stringNum) {
+    //            console.log(instrument, stringNum)
+                var string = [];
+                var ptr = instrument.openStrings[stringNum];
+                for (var i=0; i<stringLength; i++) {
+                    var spotNoteName = flats ? noteNames[ptr].flat : noteNames[ptr].sharp
+                    var spot = {note: spotNoteName, played: false}
+                    if (i == 0) {
+                        spot.openMarker = true
+                    }
+                    else if([5, 7, 9, 12].indexOf(i) > -1) {
+                        spot.marker = true
+                    }
+                    string.push(spot)
+                    ptr++
+                    if (ptr > 11) {
+                        ptr = 0
+                    }
+                }
+                return string
+            }
         }
 
 
