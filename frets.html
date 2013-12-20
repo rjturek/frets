@@ -46,7 +46,7 @@
 
         .openMarker {
             background-color: rgba(238, 189, 161, 0.20);
-            border-right: 3px solid #92b2d5;;
+            border-right: 3px solid #92b2d5;
         }
 
         .marker {
@@ -131,21 +131,34 @@ var dobro = {
 
         function getFretboard (instrument) {
 
-            var flats = true
-
-            instrument.strings = []
-            for (var i=0; i<instrument.openStrings.length; i++) {
-                var string = prepString(instrument,i)
-                instrument.strings.push(string)
+            var fretboard = {
+                flats: true,
+                name: instrument.name,
+                strings: []
             }
-            return instrument
 
-            function prepString(instrument, stringNum) {
-    //            console.log(instrument, stringNum)
+            fretboard.clearPlayed = function() {
+                alert("ppop")
+                strings.forEach(function(string) {
+                    string.forEach(function(spot) {
+                        spot.played = false
+                    })
+                })
+            }
+
+
+            for (var i=0; i<instrument.openStrings.length; i++) {
+                var string = prepString(i)
+                fretboard.strings.push(string)
+            }
+
+            return fretboard
+
+            function prepString(stringNum) {
                 var string = [];
                 var ptr = instrument.openStrings[stringNum];
                 for (var i=0; i<stringLength; i++) {
-                    var spotNoteName = flats ? noteNames[ptr].flat : noteNames[ptr].sharp
+                    var spotNoteName = fretboard.flats ? noteNames[ptr].flat : noteNames[ptr].sharp
                     var spot = {note: spotNoteName, played: false}
                     if (i == 0) {
                         spot.openMarker = true
@@ -195,9 +208,8 @@ var dobro = {
  {{instrument.name}}
  <br>
  <br>
-
-
     <div class="fretBoard">
+        <span ng-click="fretboard.clearPlayed()">clear</span>
         <div class="string" ng-repeat="string in fretboard.strings">
             <div class="spot" ng-repeat="spot in string"
                  ng-class="{openMarker:spot.openMarker, marker:spot.marker}" >
