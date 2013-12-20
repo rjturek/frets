@@ -184,10 +184,11 @@ var dobro = {
 
             fretboard.setKey = function(theKey) {
                 fretboard.key = theKey
-                if (theKey == 'C') {
+                var keyName = noteNames[theKey].flat
+                if (keyName == 'C') {
                     fretboard.flats = true
                 }
-                else if (theKey.indexOf('b') !== -1) {
+                else if (keyName.indexOf('b') !== -1) {
                     fretboard.flats = true
                 }
                 else {
@@ -263,7 +264,7 @@ var dobro = {
                 $scope.fretboard.toggleAllLikeSpots(spot)
             }
 
-            $scope.keyClicked = function(spot) {
+            $scope.keyClicked = function(key) {
                 $scope.fretboard.setKey(key)
             }
 
@@ -288,7 +289,7 @@ var dobro = {
  <br>
     <div class="fretBoard">
         <ul>
-            <li ng-repeat="key in noteNames" clicked="keyClicked(key)">{{key.flat}}</li>
+            <li ng-repeat="key in noteNames" ng-click="keyClicked($index)">{{key.flat}}</li>
         </ul>
         <div class="cmdButton" ng-click="fretboard.clearPlayed()">clear</div>
         key = {{noteNames[fretboard.key].flat}}
