@@ -209,20 +209,24 @@ var dobro = {
                 for (var i=0; i<fretboard.instrument.openStrings.length; i++) {
                     for (var j=0; j<stringLength; j++) {
                         var spot = fretboard.strings[i][j]
-                        spot.interval = intervals[spot.absolute]
+                        var intervalOffset = spot.absolute - fretboard.key
+                        if (intervalOffset < 0 ) {
+                            intervalOffset += 12
+                        }
+                        spot.interval = intervals[intervalOffset]
                         if (fretboard.flats)
                             spot.note = noteNames[spot.absolute].flat
                         else {
                             spot.note = noteNames[spot.absolute].sharp
                         }
-                        if (fretboard.showNotes) {
-                            spot.text = spot.note
-                        }
-                        else {
+                        if (fretboard.showIntervals) {
                             spot.text = spot.interval
                         }
+                        else {
+                            spot.text = spot.note
+                        }
                         // Temp debug
-                        spot.text = spot.interval
+                        //spot.text = spot.interval
                     }
                 }
             }
@@ -298,14 +302,7 @@ var dobro = {
 
 <div ng-controller="FretsController">
 
-    <br>
 
-    <form>
-        <input type="checkbox" ng-model="checked">
-        <input type="submit" ng-click="clicked()"/>
-    </form>
-
-<br><br>
  <br>
  <br>
     <div class="fretBoard">
