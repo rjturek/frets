@@ -140,6 +140,7 @@ var dobro = {
 
             var fretboard = {
                 flats: true,
+                key: "C",
                 instrument: theInstrument,
                 strings: []
             }
@@ -163,15 +164,51 @@ var dobro = {
                 })
             }
 
-
+            // Init all the strings on the fretboard.
+            // This is the first and last time the spots and strings are layed out.
+            // Markers never change
             for (var i=0; i<fretboard.instrument.openStrings.length; i++) {
-                var string = prepString(i)
+                var string = []
+                for (var j=0; j<stringLength; j++) {
+                    var spot = {}
+                    if (j == 0) {
+                        spot.openMarker = true
+                    }
+                    else if([5, 7, 9, 12].indexOf(j) !== -1) {
+                        spot.marker = true
+                    }
+                    string.push(spot)
+                }
                 fretboard.strings.push(string)
             }
 
+            fretboard.setKey = function(theKey) {
+                fretboard.key = theKey
+                if (theKey == 'C') {
+                    fretboard.flats = true
+                }
+                else if (theKey.indexOf('b') !== -1) {
+                    fretboard.flats = true
+                }
+                else {
+                    fretboard.flats = false
+                }
+            }
+
+            fretboard.setSpotsText = function() {
+                fretboard.strings.forEach(function(theString) {
+                    theString.forEach(function(theSpot) {
+                        theSpot.text = 'l'
+                    })
+                })
+            }
+
+            fretboard.setSpotsText()
+
             return fretboard
 
-            function prepString(stringNum) {
+
+            function getString(stringNum) {
                 var string = [];
                 var ptr = fretboard.instrument.openStrings[stringNum];
                 for (var i=0; i<stringLength; i++) {
