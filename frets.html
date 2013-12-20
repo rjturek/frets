@@ -20,7 +20,7 @@
         }
 
         .chosenKey {
-            background-color: rgba(163, 232, 198, 0.37);
+            background-color: rgba(146, 178, 213, 0.37);
             border: 2px solid #000000;
         }
 
@@ -142,7 +142,7 @@ var dobro = {
             var fretboard = {
                 key: 0,
                 flats: true,
-                showNotes: true,
+                showIntervals: true,
                 instrument: theInstrument,
                 strings: []
             }
@@ -183,6 +183,11 @@ var dobro = {
                     string.push(spot)
                 }
                 fretboard.strings.push(string)
+            }
+
+            fretboard.setShowIntervals = function(inputShowIntervals) {
+                fretboard.showIntervals = (inputShowIntervals == "intervals")
+                setSpotsText()
             }
 
             fretboard.setKey = function(theKey) {
@@ -271,6 +276,11 @@ var dobro = {
                 $scope.fretboard.setKey(key)
             }
 
+            $scope.showRadioClicked = function(kind) {
+                if (kind == "intervals") {}
+                    $scope.fretboard.setShowIntervals(kind)
+            }
+
             $scope.getKeyClass = function(index) {
                 if (index == $scope.fretboard.key) {
                     return "key chosenKey"
@@ -296,14 +306,25 @@ var dobro = {
     </form>
 
 <br><br>
- {{fretboard.instrument.name}}
  <br>
  <br>
     <div class="fretBoard">
         <div style="display: table-row;">
-            <div style="display: table-cell; height: 45px;" >
-                key:
-                <div ng-class="getKeyClass($index)" ng-repeat="key in noteNames" ng-click="keyClicked($index)">{{key.flat}}</div>                </ul>
+            <div style="display: table-cell; height: 30px; " >
+                {{fretboard.instrument.name}}
+                &nbsp;&nbsp;&nbsp;
+                <span style="width: 100px"></span>
+                show intervals <input type="radio" value="true"
+                                      ng-checked="fretboard.showIntervals" ng-click="showRadioClicked('intervals')">
+                &nbsp;&nbsp;&nbsp;
+                show note names <input type="radio" value="false"
+                                       ng-checked="!fretboard.showIntervals"ng-click="showRadioClicked('notes')">
+            </div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; height: 45px; " >
+                <span>key</span>
+                <span ng-class="getKeyClass($index)" ng-repeat="key in noteNames" ng-click="keyClicked($index)">{{key.flat}}</span>
             </div>
         </div>
         <div style="display: table-row" >
@@ -320,7 +341,7 @@ var dobro = {
                     </div>
                 </div>
             </div>
-            <div style="display: table-cell">
+            <div style="display: table-cell; padding-left: 8px; ">
                 <div class="cmdButton" ng-click="fretboard.clearPlayed()">clear</div>
             </div>
         </div>
