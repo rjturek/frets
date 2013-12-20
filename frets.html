@@ -136,12 +136,11 @@ var dobro = {
 ////////////////////////////////////////////////////////
 // Get a fretboard
 
-
-        function getFretboard (instrument) {
+        function getFretboard (theInstrument) {
 
             var fretboard = {
                 flats: true,
-                name: instrument.name,
+                instrument: theInstrument,
                 strings: []
             }
 
@@ -153,8 +152,19 @@ var dobro = {
                 })
             }
 
+            fretboard.toggleAllLikeSpots = function(clickedSpot) {
+                var wasPlayed = clickedSpot.played
+                fretboard.strings.forEach(function(theString) {
+                    theString.forEach(function(theSpot) {
+                        if (theSpot.note === clickedSpot.note) {
+                            theSpot.played = !wasPlayed
+                        }
+                    })
+                })
+            }
 
-            for (var i=0; i<instrument.openStrings.length; i++) {
+
+            for (var i=0; i<fretboard.instrument.openStrings.length; i++) {
                 var string = prepString(i)
                 fretboard.strings.push(string)
             }
@@ -163,10 +173,11 @@ var dobro = {
 
             function prepString(stringNum) {
                 var string = [];
-                var ptr = instrument.openStrings[stringNum];
+                var ptr = fretboard.instrument.openStrings[stringNum];
                 for (var i=0; i<stringLength; i++) {
                     var spotNoteName = fretboard.flats ? noteNames[ptr].flat : noteNames[ptr].sharp
-                    var spot = {note: spotNoteName, played: false}
+                    var spot = {note: spotNoteName, text: spotNoteName, played: false}
+
                     if (i == 0) {
                         spot.openMarker = true
                     }
@@ -181,6 +192,8 @@ var dobro = {
                 }
                 return string
             }
+
+//            function prepSpot()
         }
 
 
@@ -194,7 +207,7 @@ var dobro = {
             $scope.checked = true
 
             $scope.clicked = function(spot) {
-                spot.played = !spot.played
+                $scope.fretboard.toggleAllLikeSpots(spot)
             }
         }
     </script>
@@ -224,7 +237,7 @@ var dobro = {
                    &nbsp;
                 </div>
                 <div class="spotText" ng-click="clicked(spot)">
-                    {{spot.note}}
+                    {{spot.text}}
                 </div>
             </div>
         </div>
