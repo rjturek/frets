@@ -105,6 +105,7 @@ var noteNames =
     ]
 
 
+
 //////////////////////////////////////
 // instrument Definitions
 
@@ -139,7 +140,7 @@ var dobro = {
         function getFretboard (theInstrument) {
 
             var fretboard = {
-                key: "C",
+                key: 0,
                 flats: true,
                 showNotes: true,
                 instrument: theInstrument,
@@ -202,7 +203,11 @@ var dobro = {
                     for (var j=0; j<stringLength; j++) {
                         var spot = fretboard.strings[i][j]
                         spot.interval = intervals[spot.absolute]
-                        spot.note = 'n'
+                        if (fretboard.flats)
+                            spot.note = noteNames[spot.absolute].flat
+                        else {
+                            spot.note = noteNames[spot.absolute].sharp
+                        }
                         if (fretboard.showNotes) {
                             spot.text = spot.note
                         }
