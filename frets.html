@@ -85,7 +85,7 @@
 
 var stringLength = 17
 
-var intNames =
+var intervals =
     ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
 
 var noteNames =
@@ -139,8 +139,9 @@ var dobro = {
         function getFretboard (theInstrument) {
 
             var fretboard = {
-                flats: true,
                 key: "C",
+                flats: true,
+                showNotes: true,
                 instrument: theInstrument,
                 strings: []
             }
@@ -157,7 +158,7 @@ var dobro = {
                 var wasPlayed = clickedSpot.played
                 fretboard.strings.forEach(function(theString) {
                     theString.forEach(function(theSpot) {
-                        if (theSpot.note === clickedSpot.note) {
+                        if (theSpot.absolute === clickedSpot.absolute) {
                             theSpot.played = !wasPlayed
                         }
                     })
@@ -166,11 +167,12 @@ var dobro = {
 
             // Init all the strings on the fretboard.
             // This is the first and last time the spots and strings are layed out.
-            // Markers never change
+            // Markers and absolute note name never change
             for (var i=0; i<fretboard.instrument.openStrings.length; i++) {
                 var string = []
                 for (var j=0; j<stringLength; j++) {
                     var spot = {}
+                    spot.absolute = (fretboard.instrument.openStrings[i] + j) % 12
                     if (j == 0) {
                         spot.openMarker = true
                     }
@@ -195,15 +197,25 @@ var dobro = {
                 }
             }
 
-            fretboard.setSpotsText = function() {
-                fretboard.strings.forEach(function(theString) {
-                    theString.forEach(function(theSpot) {
-                        theSpot.text = 'l'
-                    })
-                })
+            function setSpotsText() {
+                for (var i=0; i<fretboard.instrument.openStrings.length; i++) {
+                    for (var j=0; j<stringLength; j++) {
+                        var spot = fretboard.strings[i][j]
+                        spot.interval = intervals[spot.absolute]
+                        spot.note = 'n'
+                        if (fretboard.showNotes) {
+                            spot.text = spot.note
+                        }
+                        else {
+                            spot.text = spot.interval
+                        }
+                        // Temp debug
+                        spot.text = spot.interval
+                    }
+                }
             }
 
-            fretboard.setSpotsText()
+            setSpotsText()
 
             return fretboard
 
