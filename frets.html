@@ -68,6 +68,14 @@
             border-radius: 12px;
         }
 
+        .cmdButton {
+            width: 40px;
+            border: 1px solid #92b2d5;
+            padding: 4px 4px 4px 8px;
+            margin-bottom: 12px;
+            background-color: rgba(146, 178, 213, 0.32);
+        }
+
     </style>
     <script src="public/lib/angular/angular.js"></script>
     <script>
@@ -138,10 +146,9 @@ var dobro = {
             }
 
             fretboard.clearPlayed = function() {
-                alert("ppop")
-                strings.forEach(function(string) {
-                    string.forEach(function(spot) {
-                        spot.played = false
+                fretboard.strings.forEach(function(theString) {
+                    theString.forEach(function(theSpot) {
+                        theSpot.played = false
                     })
                 })
             }
@@ -209,7 +216,7 @@ var dobro = {
  <br>
  <br>
     <div class="fretBoard">
-        <span ng-click="fretboard.clearPlayed()">clear</span>
+        <div class="cmdButton" ng-click="fretboard.clearPlayed()">clear</div>
         <div class="string" ng-repeat="string in fretboard.strings">
             <div class="spot" ng-repeat="spot in string"
                  ng-class="{openMarker:spot.openMarker, marker:spot.marker}" >
