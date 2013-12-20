@@ -7,25 +7,27 @@
             font-family: sans-serif;
         }
 
-        ul {
-            width: 100%;
-            text-align: left;
-        }
-        li {
+        .key {
             width: 30px;
             margin: 5px;
+            padding-top: 2px;
+            padding-bottom: 2px;
             display: inline-block;
             vertical-align: top;
             text-align: center;
-            background-color: #99DDBB;
             border: 1px solid #000000;
-            border-radius: 15px;
+            border-radius:7px;
+        }
+
+        .chosenKey {
+            background-color: rgba(163, 232, 198, 0.37);
+            border: 2px solid #000000;
         }
 
         .fretBoard {
+            display:table;
             font-size: 95%;
-            display: table;
-            margin-left: 50px;
+            margin-left: 20px;
         }
 
         .string {
@@ -66,6 +68,7 @@
         }
 
         .cmdButton {
+            display: table-cell;
             width: 40px;
             border: 1px solid #92b2d5;
             padding: 4px 4px 4px 8px;
@@ -107,27 +110,27 @@ var noteNames =
 // instrument Definitions
 
 var guitar = {
-    name: 'Guitar',
+    name: 'guitar',
     openStrings: [4, 11, 7, 2, 9,  4]
 }
 
 var fiddle = {
-    name: 'Fiddle',
+    name: 'fiddle',
     openStrings: [4, 9, 2, 7]
 }
 
 var ukulele = {
-    name: 'Ukulele',
+    name: 'ukulele',
     openStrings: [9, 4, 0, 7]
 }
 
 var bass = {
-    name: 'Bass',
+    name: 'bass',
     openStrings: [7, 2, 9, 4]
 }
 
 var dobro = {
-    name: 'Dobro',
+    name: 'dobro',
     openStrings: [2, 11, 7, 2, 11, 7]
 }
 
@@ -268,6 +271,15 @@ var dobro = {
                 $scope.fretboard.setKey(key)
             }
 
+            $scope.getKeyClass = function(index) {
+                if (index == $scope.fretboard.key) {
+                    return "key chosenKey"
+                }
+                else {
+                    return "key"
+                }
+            }
+
         }
     </script>
 </head>
@@ -288,20 +300,28 @@ var dobro = {
  <br>
  <br>
     <div class="fretBoard">
-        <ul>
-            <li ng-repeat="key in noteNames" ng-click="keyClicked($index)">{{key.flat}}</li>
-        </ul>
-        <div class="cmdButton" ng-click="fretboard.clearPlayed()">clear</div>
-        key = {{noteNames[fretboard.key].flat}}
-        <div class="string" ng-repeat="string in fretboard.strings">
-            <div class="spot" ng-repeat="spot in string"
-                 ng-class="{openMarker:spot.openMarker, marker:spot.marker}" >
-                <div  ng-show="spot.played" class="played">
-                   &nbsp;
+        <div style="display: table-row;">
+            <div style="display: table-cell; height: 45px;" >
+                key:
+                <div ng-class="getKeyClass($index)" ng-repeat="key in noteNames" ng-click="keyClicked($index)">{{key.flat}}</div>                </ul>
+            </div>
+        </div>
+        <div style="display: table-row" >
+            <div style="display: table-cell" >
+                <div class="string" ng-repeat="string in fretboard.strings">
+                    <div class="spot" ng-repeat="spot in string"
+                         ng-class="{openMarker:spot.openMarker, marker:spot.marker}" >
+                        <div  ng-show="spot.played" class="played">
+                           &nbsp;
+                        </div>
+                        <div class="spotText" ng-click="spotClicked(spot)">
+                            {{spot.text}}
+                        </div>
+                    </div>
                 </div>
-                <div class="spotText" ng-click="clicked(spot)">
-                    {{spot.text}}
-                </div>
+            </div>
+            <div style="display: table-cell">
+                <div class="cmdButton" ng-click="fretboard.clearPlayed()">clear</div>
             </div>
         </div>
     </div>
