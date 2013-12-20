@@ -9,14 +9,11 @@
 
         ul {
             width: 100%;
-            margin-left: auto;
-            margin-right: auto;
             text-align: left;
         }
         li {
-            width: 40px;
-            padding-left: 5px;
-            padding-right: 5px;
+            width: 30px;
+            margin: 5px;
             display: inline-block;
             vertical-align: top;
             text-align: center;
@@ -196,6 +193,7 @@ var dobro = {
                 else {
                     fretboard.flats = false
                 }
+                setSpotsText()
             }
 
             function setSpotsText() {
@@ -257,12 +255,18 @@ var dobro = {
         function FretsController($scope) {
 
             $scope.fretboard = getFretboard(guitar)
+            $scope.noteNames = noteNames
 
             $scope.checked = true
 
-            $scope.clicked = function(spot) {
+            $scope.spotClicked = function(spot) {
                 $scope.fretboard.toggleAllLikeSpots(spot)
             }
+
+            $scope.keyClicked = function(spot) {
+                $scope.fretboard.setKey(key)
+            }
+
         }
     </script>
 </head>
@@ -279,11 +283,15 @@ var dobro = {
     </form>
 
 <br><br>
- {{instrument.name}}
+ {{fretboard.instrument.name}}
  <br>
  <br>
     <div class="fretBoard">
+        <ul>
+            <li ng-repeat="key in noteNames" clicked="keyClicked(key)">{{key.flat}}</li>
+        </ul>
         <div class="cmdButton" ng-click="fretboard.clearPlayed()">clear</div>
+        key = {{noteNames[fretboard.key].flat}}
         <div class="string" ng-repeat="string in fretboard.strings">
             <div class="spot" ng-repeat="spot in string"
                  ng-class="{openMarker:spot.openMarker, marker:spot.marker}" >
