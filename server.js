@@ -1,9 +1,18 @@
 /**
  * Created by rjt on 12/14/13.
  */
-var http = require('http');
-http.createServer(function (req, res) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('Hello World\n');
-}).listen(1337, '127.0.0.1');
-console.log('Server running at http://127.0.0.1:1337/');
+//var http = require('http');
+//var fs = require('fs');
+//var index = fs.readFileSync('frets.html');
+//
+//http.createServer(function (req, res) {
+//    res.writeHead(200, {'Content-Type': 'text/html'});
+//    res.end(index);
+//}).listen(9615);
+//console.log('Server running at http://127.0.0.1:9615/');
+
+var connect = require('connect');
+connect.createServer(
+    connect.static(__dirname)
+).listen(8080);
+console.log('Server running at http://127.0.0.1:8080/');

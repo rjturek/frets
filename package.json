@@ -1,0 +1,26 @@
+{
+  "name": "frets",
+  "version": "0.0.1",
+  "description": "Fretboard study utility",
+  "main": "server.js",
+  "scripts": {
+    "test": "test.sh",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rjturek/frets.git"
+  },
+  "keywords": [
+    "music"
+  ],
+  "author": "Richard Turek",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/rjturek/frets/issues"
+  },
+  "homepage": "https://github.com/rjturek/frets",
+  "dependencies": {
+    "connect": "~2.12.0"
+  }
+}
