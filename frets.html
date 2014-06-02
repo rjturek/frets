@@ -302,6 +302,7 @@ var dobro = {
 
 <div ng-controller="FretsController">
 
+<h1>FRETS</h1>
 
  <br>
  <br>
@@ -312,10 +313,10 @@ var dobro = {
                 &nbsp;&nbsp;&nbsp;
                 <span style="width: 100px"></span>
                 show intervals <input type="radio" value="true"
-                                      ng-checked="fretboard.showIntervals" ng-click="showRadioClicked('intervals')">
+                                      ng-checked="fretboard.showIntervals" ng-click="showRadioClicked('intervals')"/>
                 &nbsp;&nbsp;&nbsp;
                 show note names <input type="radio" value="false"
-                                       ng-checked="!fretboard.showIntervals"ng-click="showRadioClicked('notes')">
+                                       ng-checked="!fretboard.showIntervals" ng-click="showRadioClicked('notes')"/>
             </div>
         </div>
         <div style="display: table-row;">
