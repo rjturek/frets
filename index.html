@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <style>
+
+        * {
+            font-family: sans-serif;
+        }
+
+        .key {
+            width: 30px;
+            margin: 5px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            border: 1px solid #000000;
+            border-radius:7px;
+        }
+
+        .chosenKey {
+            background-color: rgba(146, 178, 213, 0.37);
+            border: 2px solid #000000;
+        }
+
+        .fretBoard {
+            display:table;
+            font-size: 95%;
+            margin-left: 20px;
+        }
+
+        .string {
+            display:table-row;
+            background-color: rgba(255, 205, 178, 0.13);
+        }
+        .spot {
+            position: relative;
+            display: inline-block;
+            width: 32px;
+            height: 25px;
+            margin: -2px 0 -2px 0;
+            border: 1px solid #92b2d5;
+        }
+
+        .openMarker {
+            background-color: rgba(238, 189, 161, 0.20);
+            border-right: 3px solid #92b2d5;
+        }
+
+        .marker {
+            background-color: rgba(251, 202, 172, 0.15);
+        }
+
+        .spotText {
+            position:absolute;
+            width: 25px;
+            margin: 4px 0 0px 6px;
+        }
+
+        .played {
+            position: absolute;
+            width: 25px;
+            margin: 3px 2px 0px 2px;
+            background-color: rgba(146, 178, 213, 0.32);
+            border: 1px solid #92b2d5;
+            border-radius: 12px;
+        }
+
+        .cmdButton {
+            display: table-cell;
+            width: 40px;
+            border: 1px solid #92b2d5;
+            padding: 4px 4px 4px 8px;
+            margin-bottom: 12px;
+            background-color: rgba(146, 178, 213, 0.32);
+        }
+
+    </style>
+    <script src="public/lib/angular/angular.js"></script>
+    <script>
+
+/////////////////////////////////////////////////////////////
+// Constants
+
+var stringLength = 17
+
+var intervals =
+    ['1','b9','9','b3','3','4','b5','5','#5','6','b7','7']
+
+var noteNames =
+    [
+        {flat: 'C', sharp:'C'},
+        {flat: 'Db', sharp:'C#'},
+        {flat: 'D', sharp:'D'},
+        {flat: 'Eb', sharp:'D#'},
+        {flat: 'E', sharp:'E'},
+        {flat: 'F', sharp:'F'},
+        {flat: 'Gb', sharp:'F#'},
+        {flat: 'G', sharp:'G'},
+        {flat: 'Ab', sharp:'G#'},
+        {flat: 'A', sharp:'A'},
+        {flat: 'Bb', sharp:'A#'},
+        {flat: 'B', sharp:'B'}
+    ]
+
+
+
+//////////////////////////////////////
+// instrument Definitions
+
+var guitar = {
+    name: 'guitar',
+    openStrings: [4, 11, 7, 2, 9,  4]
+}
+
+var fiddle = {
+    name: 'fiddle',
+    openStrings: [4, 9, 2, 7]
+}
+
+var ukulele = {
+    name: 'ukulele',
+    openStrings: [9, 4, 0, 7]
+}
+
+var bass = {
+    name: 'bass',
+    openStrings: [7, 2, 9, 4]
+}
+
+var dobro = {
+    name: 'dobro',
+    openStrings: [2, 11, 7, 2, 11, 7]
+}
+
+////////////////////////////////////////////////////////
+// Get a fretboard
+
+        function getFretboard (theInstrument) {
+
+            var fretboard = {
+                key: 0,
+                flats: true,
+                showIntervals: true,
+                instrument: theInstrument,
+                strings: []
+            }
+
+            fretboard.clearPlayed = function() {
+                fretboard.strings.forEach(function(theString) {
+                    theString.forEach(function(theSpot) {
+                        theSpot.played = false
+                    })
+                })
+            }
+
+            fretboard.toggleAllLikeSpots = function(clickedSpot) {
+                var wasPlayed = clickedSpot.played
+                fretboard.strings.forEach(function(theString) {
+                    theString.forEach(function(theSpot) {
+                        if (theSpot.absolute === clickedSpot.absolute) {
+                            theSpot.played = !wasPlayed
+                        }
+                    })
+                })
+            }
+
+            // Init all the strings on the fretboard.
+            // This is the first and last time the spots and strings are layed out.
+            // Markers and absolute note offset never change
+            for (var i=0; i<fretboard.instrument.openStrings.length; i++) {
+                var string = []
+                for (var j=0; j<stringLength; j++) {
+                    var spot = {}
+                    spot.absolute = (fretboard.instrument.openStrings[i] + j) % 12
+                    if (j == 0) {
+                        spot.openMarker = true
+                    }
+                    else if([5, 7, 9, 12].indexOf(j) !== -1) {
+                        spot.marker = true
+                    }
+                    string.push(spot)
+                }
+                fretboard.strings.push(string)
+            }
+
+            fretboard.setShowIntervals = function(inputShowIntervals) {
+                fretboard.showIntervals = (inputShowIntervals == "intervals")
+                setSpotsText()
+            }
+
+            fretboard.setKey = function(theKey) {
+                fretboard.key = theKey
+                var keyName = noteNames[theKey].flat
+                if (keyName == 'C') {
+                    fretboard.flats = true
+                }
+                else if (keyName.indexOf('b') !== -1) {
+                    fretboard.flats = true
+                }
+                else {
+                    fretboard.flats = false
+                }
+                setSpotsText()
+            }
+
+            function setSpotsText() {
+                for (var i=0; i<fretboard.instrument.openStrings.length; i++) {
+                    for (var j=0; j<stringLength; j++) {
+                        var spot = fretboard.strings[i][j]
+                        var intervalOffset = spot.absolute - fretboard.key
+                        if (intervalOffset < 0 ) {
+                            intervalOffset += 12
+                        }
+                        spot.interval = intervals[intervalOffset]
+                        if (fretboard.flats)
+                            spot.note = noteNames[spot.absolute].flat
+                        else {
+                            spot.note = noteNames[spot.absolute].sharp
+                        }
+                        if (fretboard.showIntervals) {
+                            spot.text = spot.interval
+                        }
+                        else {
+                            spot.text = spot.note
+                        }
+                        // Temp debug
+                        //spot.text = spot.interval
+                    }
+                }
+            }
+
+            setSpotsText()
+
+            return fretboard
+
+
+            function getString(stringNum) {
+                var string = [];
+                var ptr = fretboard.instrument.openStrings[stringNum];
+                for (var i=0; i<stringLength; i++) {
+                    var spotNoteName = fretboard.flats ? noteNames[ptr].flat : noteNames[ptr].sharp
+                    var spot = {note: spotNoteName, text: spotNoteName, played: false}
+
+                    if (i == 0) {
+                        spot.openMarker = true
+                    }
+                    else if([5, 7, 9, 12].indexOf(i) > -1) {
+                        spot.marker = true
+                    }
+                    string.push(spot)
+                    ptr++
+                    if (ptr > 11) {
+                        ptr = 0
+                    }
+                }
+                return string
+            }
+
+//            function prepSpot()
+        }
+
+
+//////////////////////////////////////////////////////////////////////////////
+// Controller
+
+        function FretsController($scope) {
+
+            $scope.fretboard = getFretboard(guitar)
+            $scope.noteNames = noteNames
+
+            $scope.checked = true
+
+            $scope.spotClicked = function(spot) {
+                $scope.fretboard.toggleAllLikeSpots(spot)
+            }
+
+            $scope.keyClicked = function(key) {
+                $scope.fretboard.setKey(key)
+            }
+
+            $scope.showRadioClicked = function(kind) {
+                if (kind == "intervals") {}
+                    $scope.fretboard.setShowIntervals(kind)
+            }
+
+            $scope.getKeyClass = function(index) {
+                if (index == $scope.fretboard.key) {
+                    return "key chosenKey"
+                }
+                else {
+                    return "key"
+                }
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+
+<div ng-controller="FretsController">
+
+<h1>FRETS</h1>
+
+ <br>
+ <br>
+    <div class="fretBoard">
+        <div style="display: table-row;">
+            <div style="display: table-cell; height: 30px; " >
+                {{fretboard.instrument.name}}
+                &nbsp;&nbsp;&nbsp;
+                <span style="width: 100px"></span>
+                show intervals <input type="radio" value="true"
+                                      ng-checked="fretboard.showIntervals" ng-click="showRadioClicked('intervals')"/>
+                &nbsp;&nbsp;&nbsp;
+                show note names <input type="radio" value="false"
+                                       ng-checked="!fretboard.showIntervals" ng-click="showRadioClicked('notes')"/>
+            </div>
+        </div>
+        <div style="display: table-row;">
+            <div style="display: table-cell; height: 45px; " >
+                <span>key</span>
+                <span ng-class="getKeyClass($index)" ng-repeat="key in noteNames" ng-click="keyClicked($index)">{{key.flat}}</span>
+            </div>
+        </div>
+        <div style="display: table-row" >
+            <div style="display: table-cell" >
+                <div class="string" ng-repeat="string in fretboard.strings">
+                    <div class="spot" ng-repeat="spot in string"
+                         ng-class="{openMarker:spot.openMarker, marker:spot.marker}" >
+                        <div  ng-show="spot.played" class="played">
+                           &nbsp;
+                        </div>
+                        <div class="spotText" ng-click="spotClicked(spot)">
+                            {{spot.text}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: table-cell; padding-left: 8px; ">
+                <div class="cmdButton" ng-click="fretboard.clearPlayed()">clear</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
